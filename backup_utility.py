@@ -80,7 +80,7 @@ def run_debug() -> None:
 
 
     print(f'{create_staged_backup(
-        Path.cwd() / Path('the_target'),
+        Path.cwd() / Path('sample_target'),
         Path.cwd(),
         'cmprsd_fldr'
     )}')
