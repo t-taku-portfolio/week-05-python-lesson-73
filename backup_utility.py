@@ -50,7 +50,7 @@ def correct_target_logs(source_dir: str, extension: str) -> list:
 def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str) -> str:
     """Copies discovered files into a staging directory using shutil.copy2(),\n
     compress the staged directory into a zip archive, and returns the final archive file path."""
-    # find file and staging directory: pass
+    # find file and staging directory: need to implemented after
     
     # compress the staged directory into a zip archive
     try:
