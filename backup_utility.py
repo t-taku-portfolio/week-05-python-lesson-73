@@ -8,7 +8,7 @@ def audit_directory_space(target_path: str) -> dict:
 
     target_dir = Path(target_path).resolve()
     if not target_dir.is_dir():
-        raise FileNotFoundError(f'Given target is not found: {target_dir}')
+        raise FileNotFoundError(f'[ERROR]Given target is not found: {target_dir}')
 
     try:
         usge_named_tuple = shutil.disk_usage(target_dir)
@@ -16,13 +16,13 @@ def audit_directory_space(target_path: str) -> dict:
                 "used": int(usge_named_tuple.used / (1024 * 1024)),
                 "free": int(usge_named_tuple.free / (1024 * 1024))}
     except FileNotFoundError:
-        print(f'File not found: {target_dir}')
+        print(f'[ERROR]File not found: {target_dir}')
         raise
     except PermissionError:
-        print(f'Not allowed to access: {target_dir}' )
+        print(f'[ERROR]Not allowed to access: {target_dir}' )
         raise
     except OSError as e:
-        print(f'Failed to reach the storage. path: {target_dir}, error: ({e})')
+        print(f'[ERROR]Failed to reach the storage. path: {target_dir}, error: ({e})')
         raise
 
 
@@ -37,15 +37,16 @@ def correct_target_logs(source_dir: str, extension: str) -> list:
         for file_path in dir_path.glob(f'*{extension}'):
             if file_path.is_file() and file_path.stat().st_size > 0 :
                 discovered_files.append(file_path)
+        print('[DONE]')
         return discovered_files
     except FileNotFoundError:
-        print(f'File not found: {source_dir}')
+        print(f'[ERROR]File not found: {source_dir}')
         raise
     except PermissionError:
-        print(f'Not allowed to access: {source_dir}' )
+        print(f'[ERROR]Not allowed to access: {source_dir}' )
         raise
     except OSError:
-        print(f'Failed to reach the storage. path: {source_dir}')
+        print(f'[ERROR]Failed to reach the storage. path: {source_dir}')
         raise
 
 
@@ -53,6 +54,8 @@ def correct_target_logs(source_dir: str, extension: str) -> list:
 def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str) -> str:
     """Copies discovered files into a staging directory using shutil.copy2(),\n
     compress the staged directory into a zip archive, and returns the final archive file path."""
+
+
 
     try:
     # find file and staging directory: need to implemented after
@@ -69,7 +72,7 @@ def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str) -> 
             base_dir= Path(staged_source_dir).name
         )
     except (FileNotFoundError, PermissionError, OSError):
-        print(f"Couldn't reach the pathes. source: {source_dir}, stage_dir: {stage_dir}")
+        print(f"[ERROR]Couldn't reach the pathes. source: {source_dir}, stage_dir: {stage_dir}")
         raise
 
     # return final archive file path
@@ -77,13 +80,15 @@ def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str) -> 
 
 
 
-def run_debug() -> None:
+def run_debug(toggle= False) -> None:
+    if not toggle: return
+
     usage_dict = audit_directory_space(Path.home())
     for key in usage_dict:
         print(f'{key}: {usage_dict[key]} MB')
 
 
-    print(f'including .log: {correct_target_logs(".", ".log")}')
+    print(f'[INFO]including .log: {correct_target_logs(".", ".log")}')
 
 
     print(f'{create_staged_backup(
