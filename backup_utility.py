@@ -6,20 +6,23 @@ def audit_directory_space(target_path: str) -> dict:
     """Evaluates disk space and returnes a dictionary with total, used, and free capacity.\n
     shutil.disk_usage returns a named tuple with the keys named 'total' and 'used', 'free'."""
 
-    # correct error handling will be implemented in feature
+    target_dir = Path(target_path).resolve()
+    if not target_dir.is_dir():
+        raise FileNotFoundError(f'Given target is not found: {target_dir}')
+
     try:
-        usge_named_tuple = shutil.disk_usage(target_path)
+        usge_named_tuple = shutil.disk_usage(target_dir)
         return {"total": int(usge_named_tuple.total / (1024 * 1024)), 
                 "used": int(usge_named_tuple.used / (1024 * 1024)),
                 "free": int(usge_named_tuple.free / (1024 * 1024))}
     except FileNotFoundError:
-        print(f'File not found: {target_path}')
+        print(f'File not found: {target_dir}')
         raise
     except PermissionError:
-        print(f'Not allowed to access: {target_path}' )
+        print(f'Not allowed to access: {target_dir}' )
         raise
     except OSError as e:
-        print(f'Failed to reach the storage. path: {target_path}, error: ({e})')
+        print(f'Failed to reach the storage. path: {target_dir}, error: ({e})')
         raise
 
 
@@ -29,7 +32,7 @@ def correct_target_logs(source_dir: str, extension: str) -> list:
 
     # try to reach the dir and return files that including the extension
     dir_path = Path(source_dir).resolve()
-    try:    
+    try:
         discovered_files = []
         for file_path in dir_path.glob(f'*{extension}'):
             if file_path.is_file() and file_path.stat().st_size > 0 :
@@ -53,23 +56,24 @@ def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str) -> 
 
     try:
     # find file and staging directory: need to implemented after
-
+        staged_source_dir = shutil.copy2(
+            src= Path(source_dir).resolve(),
+            dst= stage_dir)
 
     # compress the staged directory into a zip archive
-
         target_base_name = (Path(stage_dir) / archive_name).resolve()
-        shutil.make_archive(
+        compressed_file_dst = shutil.make_archive(
             base_name= target_base_name,
             format= 'zip',
-            root_dir= Path(source_dir).parent,
-            base_dir= Path(source_dir).name
+            root_dir= Path(staged_source_dir).parent,
+            base_dir= Path(staged_source_dir).name
         )
     except (FileNotFoundError, PermissionError, OSError):
         print(f"Couldn't reach the pathes. source: {source_dir}, stage_dir: {stage_dir}")
         raise
 
     # return final archive file path
-    return target_base_name
+    return compressed_file_dst
 
 
 
