@@ -28,7 +28,7 @@ def correct_target_logs(source_dir: str, extension: str) -> list:
     """Discover all files matching a specific extension (e.g., .log, .txt)"""
 
     # try to reach the dir and return files that including the extension
-    dir_path = Path(source_dir)
+    dir_path = Path(source_dir).resolve()
     try:    
         discovered_files = []
         for file_path in dir_path.glob(f'*{extension}'):
@@ -50,11 +50,14 @@ def correct_target_logs(source_dir: str, extension: str) -> list:
 def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str) -> str:
     """Copies discovered files into a staging directory using shutil.copy2(),\n
     compress the staged directory into a zip archive, and returns the final archive file path."""
-    # find file and staging directory: need to implemented after
-    
-    # compress the staged directory into a zip archive
+
     try:
-        target_base_name = (Path(stage_dir) / archive_name).expanduser()
+    # find file and staging directory: need to implemented after
+
+
+    # compress the staged directory into a zip archive
+
+        target_base_name = (Path(stage_dir) / archive_name).resolve()
         shutil.make_archive(
             base_name= target_base_name,
             format= 'zip',
