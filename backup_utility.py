@@ -43,7 +43,7 @@ def correct_target_logs(source_dir: str, extension: str) -> list:
         print(f'[ERROR]File not found: {source_dir}')
         raise
     except PermissionError:
-        print(f'[ERROR]Not allowed to access: {source_dir}' )
+        print(f'[ERROR]Not allowed to access: {source_dir}')
         raise
     except OSError:
         print(f'[ERROR]Failed to reach the storage. path: {source_dir}')
@@ -55,16 +55,22 @@ def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str) -> 
     """Copies discovered files into a staging directory using shutil.copy2(),\n
     compress the staged directory into a zip archive, and returns the final archive file path."""
 
+    source_dir_path = Path(source_dir)
+    stage_dir_path = Path(stage_dir)
+    archive_name_path = Path(archive_name)
 
+    # check whether the partition has enough storage for copy and archive
+    free_disk_MB = shutil.disk_usage(stage_dir_path).free
+    source_usage_MB = Path.stat(source_dir_path).st_size
 
     try:
-    # find file and staging directory: need to implemented after
+    # find file and staging directory
         staged_source_dir = shutil.copy2(
-            src= Path(source_dir).resolve(),
-            dst= stage_dir)
+            src= source_dir_path.resolve(),
+            dst= stage_dir_path.resolve())
 
     # compress the staged directory into a zip archive
-        target_base_name = (Path(stage_dir) / archive_name).resolve()
+        target_base_name = (stage_dir_path / archive_name_path).resolve()
         compressed_file_dst = shutil.make_archive(
             base_name= target_base_name,
             format= 'zip',
