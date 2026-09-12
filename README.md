@@ -9,7 +9,7 @@
 ## RoadMap
 - [x] Functions retrun messages with path.
 - [x] Functions show progress report.
-- [ ] Test refactored codes.
+- [x] Test refactored codes.
 - [x] Correct exception messages using brackets.
 
 ## Reference
