@@ -140,7 +140,7 @@ def run_debug() -> None:
     print(f'[INFO]including .log: {correct_target_extension(".", ".log")}')
 
 
-    print(f'{create_staged_backup(
+    print(f'created the archive at {create_staged_backup(
         Path.cwd() / Path('sample_target'),
         Path.cwd(),
         'cmprsd_fldr'
