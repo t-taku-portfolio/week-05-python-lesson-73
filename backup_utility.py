@@ -1,6 +1,7 @@
 import shutil
 from pathlib import Path
 
+
 def bytes_to_mb(b): return int(b / (1024 * 1024))
 
 def audit_directory_space(target_path: str) -> dict:
@@ -29,7 +30,7 @@ def audit_directory_space(target_path: str) -> dict:
 
 
 
-def correct_target_logs(source_dir: str, extension: str) -> list:
+def correct_target_extension(source_dir: str, extension: str) -> list:
     """Discover all files matching a specific extension (e.g., .log, .txt)"""
 
     # try to reach the dir and return files that including the extension
@@ -98,7 +99,7 @@ def run_debug() -> None:
         print(f'{key}: {usage_dict[key]} MB')
 
 
-    print(f'[INFO]including .log: {correct_target_logs(".", ".log")}')
+    print(f'[INFO]including .log: {correct_target_extension(".", ".log")}')
 
 
     print(f'{create_staged_backup(
