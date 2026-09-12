@@ -97,14 +97,14 @@ def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str, cle
     if source_usage_MB * 3 > free_disk_MB:
         raise OSError(f"Insufficient disk space: need {source_usage_MB * 3} MB, have {free_disk_MB} MB")
 
-    print('[SUCCESS] has enough storage')
+    print('[CHECKED] enough storage')
 
     try:
     # find file and staging directory
         staged_source_dir = shutil.copytree(
             src= source_dir_path.resolve(),
             dst= stage_dir_path.resolve() / Path('backup'))
-        print('[SUCCESS] staged directory successfuly')
+        print('[SUCCESS] staged directory')
 
     # compress the staged directory into a zip archive
         target_base_name = (stage_dir_path / archive_name_path).resolve()
