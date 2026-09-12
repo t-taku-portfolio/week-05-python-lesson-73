@@ -1,6 +1,7 @@
 import shutil
 from pathlib import Path
 
+def bytes_to_mb(b): return int(b / (1024 * 1024))
 
 def audit_directory_space(target_path: str) -> dict:
     """Evaluates disk space and returnes a dictionary with total, used, and free capacity.
@@ -13,9 +14,9 @@ def audit_directory_space(target_path: str) -> dict:
 
     try:
         usage_named_tuple = shutil.disk_usage(target_dir)
-        return {"total": int(usage_named_tuple.total / (1024 * 1024)), 
-                "used": int(usage_named_tuple.used / (1024 * 1024)),
-                "free": int(usage_named_tuple.free / (1024 * 1024))}
+        return {"total": bytes_to_mb(usage_named_tuple.total), 
+                "used": bytes_to_mb(usage_named_tuple.used),
+                "free": bytes_to_mb(usage_named_tuple.free)}
     except FileNotFoundError:
         print(f'[ERROR]File not found: {target_dir}')
         raise
