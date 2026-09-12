@@ -70,7 +70,7 @@ def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str) -> 
 
     try:
     # find file and staging directory
-        staged_source_dir = shutil.copy2(
+        staged_source_dir = shutil.copytree(
             src= source_dir_path.resolve(),
             dst= stage_dir_path.resolve())
 
