@@ -150,7 +150,7 @@ def run_debug() -> None:
 
 
     print(f'created the archive at {create_staged_backup(
-        Path.cwd() / Path('sample_target'),
+        Path.cwd() / Path('src') / Path('sample_resource') / Path('sample_target'),
         Path.cwd(),
         'cmprsd_fldr'
     )}')
