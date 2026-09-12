@@ -3,6 +3,8 @@ import shutil
 from pathlib import Path
 
 
+def print_separator(): print('-'*10)
+
 def bytes_to_mb(b): return int(b / (1024 * 1024))
 
 
@@ -19,6 +21,9 @@ def audit_directory_space(target_path: str) -> dict:
     """Evaluates disk space and returnes a dictionary with total, used, and free capacity.
 
     shutil.disk_usage returns a named tuple with the keys named 'total' and 'used', 'free'."""
+
+    print_separator()
+    print(f'{audit_directory_space.__name__}')
 
     target_dir = Path(target_path).resolve()
     if not target_dir.is_dir():
@@ -38,11 +43,17 @@ def audit_directory_space(target_path: str) -> dict:
     except OSError as e:
         print(f'[ERROR]Failed to reach the storage. path: {target_dir}, error: ({e})')
         raise
+    finally:
+        print('[DONE]')
+        print_separator()
 
 
 
 def correct_target_extension(source_dir: str, extension: str) -> list:
     """Discover all files matching a specific extension (e.g., .log, .txt)"""
+
+    print_separator()
+    print(f'{correct_target_extension.__name__}')
 
     # try to reach the dir and return files that including the extension
     dir_path = Path(source_dir).resolve()
@@ -51,7 +62,6 @@ def correct_target_extension(source_dir: str, extension: str) -> list:
         for file_path in dir_path.glob(f'*{extension}'):
             if file_path.is_file() and file_path.stat().st_size > 0 :
                 discovered_files.append(file_path)
-        print('[DONE]')
         return discovered_files
     except FileNotFoundError:
         print(f'[ERROR]File not found: {source_dir}')
@@ -62,12 +72,18 @@ def correct_target_extension(source_dir: str, extension: str) -> list:
     except OSError:
         print(f'[ERROR]Failed to reach the storage. path: {source_dir}')
         raise
+    finally:
+        print('[DONE]')
+        print_separator()
 
 
 
 def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str, cleanup= True) -> str:
     """Copies discovered files into a staging directory using shutil.copy2(),
     compress the staged directory into a zip archive, and returns the final archive file path."""
+
+    print_separator()
+    print(f'{create_staged_backup.__name__}')
 
     source_dir_path = Path(source_dir)
     stage_dir_path = Path(stage_dir)
@@ -86,6 +102,7 @@ def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str, cle
         staged_source_dir = shutil.copytree(
             src= source_dir_path.resolve(),
             dst= stage_dir_path.resolve())
+        print('[SUCCESS]staged directory successfuly')
 
     # compress the staged directory into a zip archive
         target_base_name = (stage_dir_path / archive_name_path).resolve()
@@ -101,6 +118,8 @@ def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str, cle
 
     if cleanup:
         shutil.rmtree(staged_source_dir)
+        print('[SUCCESS] cleaned up staged directory')
+    print_separator()
 
     # return final archive file path
     return compressed_file_dst
