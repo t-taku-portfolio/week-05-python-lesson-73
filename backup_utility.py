@@ -65,7 +65,7 @@ def correct_target_extension(source_dir: str, extension: str) -> list:
 
 
 
-def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str) -> str:
+def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str, cleanup= True) -> str:
     """Copies discovered files into a staging directory using shutil.copy2(),
     compress the staged directory into a zip archive, and returns the final archive file path."""
 
@@ -98,6 +98,9 @@ def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str) -> 
     except (FileNotFoundError, PermissionError, OSError):
         print(f"[ERROR]Couldn't reach the pathes. source: {source_dir}, stage_dir: {stage_dir}")
         raise
+
+    if cleanup:
+        shutil.rmtree(staged_source_dir)
 
     # return final archive file path
     return compressed_file_dst
