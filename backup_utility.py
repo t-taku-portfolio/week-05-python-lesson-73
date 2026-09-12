@@ -3,7 +3,8 @@ from pathlib import Path
 
 
 def audit_directory_space(target_path: str) -> dict:
-    """Evaluates disk space and returnes a dictionary with total, used, and free capacity.\n
+    """Evaluates disk space and returnes a dictionary with total, used, and free capacity.
+
     shutil.disk_usage returns a named tuple with the keys named 'total' and 'used', 'free'."""
 
     target_dir = Path(target_path).resolve()
@@ -52,7 +53,7 @@ def correct_target_logs(source_dir: str, extension: str) -> list:
 
 
 def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str) -> str:
-    """Copies discovered files into a staging directory using shutil.copy2(),\n
+    """Copies discovered files into a staging directory using shutil.copy2(),
     compress the staged directory into a zip archive, and returns the final archive file path."""
 
     source_dir_path = Path(source_dir)
