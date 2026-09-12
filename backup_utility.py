@@ -63,8 +63,8 @@ def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str) -> 
 
     # check whether the partition has enough storage for copy and archive
     # the free disk needs to have a multiplier of 3 times the source file size in this function
-    free_disk_MB = shutil.disk_usage(stage_dir_path).free
-    source_usage_MB = Path.stat(source_dir_path).st_size
+    free_disk_MB = bytes_to_mb(shutil.disk_usage(stage_dir_path).free)
+    source_usage_MB = bytes_to_mb(Path.stat(source_dir_path).st_size)
     if source_usage_MB * 3 > free_disk_MB:
         raise OSError(f"Insufficient disk space: need {source_usage_MB * 3} MB, have {free_disk_MB} MB")
 
