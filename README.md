@@ -7,8 +7,8 @@
 - Run sample test. Having happy pass only curently.
 
 ## RoadMap
-- [ ] Functions retrun messages with path.
-- [ ] Functions show progress report.
+- [x] Functions retrun messages with path.
+- [x] Functions show progress report.
 - [ ] Test refactored codes.
 - [x] Correct exception messages using brackets.
 
