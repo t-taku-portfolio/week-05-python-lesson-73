@@ -1,5 +1,11 @@
 # backup_utility.py
 
+## Feature
+- Audit directory space
+- Correct target extension
+- Create staged backup
+- Run sample test. Having happy pass only curently.
+
 ## RoadMap
 - [ ] Functions retrun messages with path.
 - [ ] Functions show progress report.
