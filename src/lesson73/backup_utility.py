@@ -25,9 +25,12 @@ def audit_directory_space(target_path: str) -> dict:
     print_separator()
     print(f'{audit_directory_space.__name__}')
 
+    if not target_path:
+        raise ValueError('[ERROR] path argument shold not be empty')
+
     target_dir = Path(target_path).resolve()
     if not target_dir.is_dir():
-        raise FileNotFoundError(f'[ERROR]Given target is not found: {target_dir}')
+        raise FileNotFoundError(f'[ERROR] Given target is not found: {target_dir}')
 
     try:
         usage_named_tuple = shutil.disk_usage(target_dir)
@@ -35,13 +38,13 @@ def audit_directory_space(target_path: str) -> dict:
                 "used": bytes_to_mb(usage_named_tuple.used),
                 "free": bytes_to_mb(usage_named_tuple.free)}
     except FileNotFoundError:
-        print(f'[ERROR]File not found: {target_dir}')
+        print(f'[ERROR] File not found: {target_dir}')
         raise
     except PermissionError:
-        print(f'[ERROR]Not allowed to access: {target_dir}' )
+        print(f'[ERROR] Not allowed to access: {target_dir}' )
         raise
     except OSError as e:
-        print(f'[ERROR]Failed to reach the storage. path: {target_dir}, error: ({e})')
+        print(f'[ERROR] Failed to reach the storage. path: {target_dir}, error: ({e})')
         raise
     finally:
         print('[DONE]')
@@ -54,6 +57,9 @@ def correct_target_extension(source_dir: str, extension: str) -> list:
 
     print_separator()
     print(f'{correct_target_extension.__name__}')
+
+    if not source_dir or not extension:
+        raise ValueError('[ERROR] arguments should not be empty')
 
     # try to reach the dir and return files that including the extension
     dir_path = Path(source_dir).resolve()
@@ -84,6 +90,9 @@ def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str, cle
 
     print_separator()
     print(f'{create_staged_backup.__name__}')
+
+    if not source_dir or not stage_dir or not archive_name:
+        raise ValueError('[ERROR] arguments should not be empty')
 
     source_dir_path = Path(source_dir)
     stage_dir_path = Path(stage_dir)
