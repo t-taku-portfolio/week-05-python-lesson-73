@@ -4,4 +4,4 @@
 - [ ] Functions retrun messages with path.
 - [ ] Functions show progress report.
 - [ ] Test refactored codes.
-- [ ] Correct exception messages using brackets.
+- [x] Correct exception messages using brackets.

@@ -1,8 +1,19 @@
+import os
 import shutil
 from pathlib import Path
 
 
 def bytes_to_mb(b): return int(b / (1024 * 1024))
+
+
+
+def calc_total_size(target_path: Path) -> int:
+    total_size = 0
+    for element in os.scandir(target_path):
+        total_size += os.path.getsize(element)
+    return bytes_to_mb(total_size)
+
+
 
 def audit_directory_space(target_path: str) -> dict:
     """Evaluates disk space and returnes a dictionary with total, used, and free capacity.
@@ -65,7 +76,8 @@ def create_staged_backup(source_dir: str, stage_dir: str, archive_name: str) -> 
     # check whether the partition has enough storage for copy and archive
     # the free disk needs to have a multiplier of 3 times the source file size in this function
     free_disk_MB = bytes_to_mb(shutil.disk_usage(stage_dir_path).free)
-    source_usage_MB = bytes_to_mb(Path.stat(source_dir_path).st_size)
+    source_usage_MB = calc_total_size(source_dir_path)
+
     if source_usage_MB * 3 > free_disk_MB:
         raise OSError(f"Insufficient disk space: need {source_usage_MB * 3} MB, have {free_disk_MB} MB")
 
